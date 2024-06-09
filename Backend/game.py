@@ -117,8 +117,218 @@ class Game:
         self.table.append(self.deck.deal_card())
 
     def evaluate_hands(self):
-        
         ph = self.player.hand
         bh = self.bot.hand
+        table = self.table
 
-         
+        cards = [ph.extend(bh)]
+        cards.extend(table)
+
+
+
+    def is_royal_flush(self, cards):
+        
+        if not self.is_straight_flush(cards):
+            return False
+        
+        ranks = []
+
+        for card in cards:
+            rank = card.split(" of ")[0]
+            ranks.append(rank)
+        
+        if "Ace" not in ranks:
+            return False
+        
+        if "King" not in ranks:
+            return False
+        
+        if "Queen" not in ranks:
+            return False
+        
+        if "Jack" not in ranks:
+            return False
+        
+        if "10" not in ranks:
+            return False
+        
+        return True
+
+    
+    def is_straight_flush(self, cards):
+        return self.is_flush(cards) and self.is_straight(cards)
+    
+    def is_four_of_kind(self, cards):
+        ranks = dict()
+
+        for card in cards:
+            rank = card.split(" of ")[0]
+            
+            if rank in ranks:
+                ranks[rank] += 1
+            else:
+                ranks[rank] = 1
+            
+        for rank in ranks.keys():
+            if ranks[rank] == 4:
+                return True
+            
+        return False
+
+    
+    def is_full_house(self, cards):
+        ranks = dict()
+
+        for card in cards:
+            rank = card.split(" of ")[0]
+            
+            if rank in ranks:
+                ranks[rank] += 1
+            else:
+                ranks[rank] = 1
+        
+        two_pair = False
+        three_kind = False
+
+        for rank in ranks.keys():
+            if ranks[rank] == 3:
+                three_kind = True
+            elif ranks[rank] == 2:
+                two_pair = True
+            
+        return three_kind and two_pair
+    
+
+    
+    def is_flush(self, cards):
+        suits = dict()
+
+        for card in cards:
+            suit = card.split(" of ")[1]
+
+            if suit in suits:
+                suits[suit] += 1
+            else:
+                suits[suit] = 1
+
+        for suit in suits.keys():
+            if suits[suit] == 5:
+                return True
+        
+        return False
+
+
+    def is_straight(self, cards):
+        ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
+        values = {rank: index for index, rank in enumerate(ranks)}
+        sorted_cards = sorted([values[card.split(" of ")[0]] for card in cards])
+        for i in range(len(sorted_cards) - 4):
+            if sorted_cards[i:i+5] == list(range(sorted_cards[i], sorted_cards[i]+5)):
+                return True
+        return False
+        
+
+    
+    def is_three_of_kind(self, cards):
+        ranks = dict()
+
+        for card in cards:
+            rank = card.split(" of ")[0]
+            
+            if rank in ranks:
+                ranks[rank] += 1
+            else:
+                ranks[rank] = 1
+            
+        for rank in ranks.keys():
+            if ranks[rank] == 3:
+                return True
+            
+        return False
+    
+
+    def is_two_pair(self, cards):
+        ranks = dict()
+
+        for card in cards:
+            rank = card.split(" of ")[0]
+            
+            if rank in ranks:
+                ranks[rank] += 1
+            else:
+                ranks[rank] = 1
+        
+        pair_num = 0
+
+        for rank in ranks.keys():
+            if ranks[rank] == 2:
+                pair_num += 1
+            
+        return pair_num == 2
+        
+
+    def is_pair(self, cards):
+        ranks = dict()
+
+        for card in cards:
+            rank = card.split(" of ")[0]
+            
+            if rank in ranks:
+                ranks[rank] += 1
+            else:
+                ranks[rank] = 1
+        
+        pair_num = 0
+
+        for rank in ranks.keys():
+            if ranks[rank] == 2:
+                pair_num += 1
+            
+        return pair_num == 1
+        
+
+    def get_high_card(self, cards):
+        ranks = []
+
+        for card in cards:
+            rank = card.split(" of ")[0]
+            ranks.append(rank)
+        
+        if "Ace" in ranks:
+            return "Ace"
+        
+        elif "King" in ranks:
+            return "King"
+        
+        elif "Queen" in ranks:
+            return "Queen"
+        
+        elif "Jack" in ranks:
+            return "Jack"
+
+        elif "10" in ranks:
+            return "10"
+
+        elif "9" in ranks:
+            return "9"
+
+        elif "8" in ranks:
+            return "8"
+
+        elif "7" in ranks:
+            return "7"
+
+        elif "6" in ranks:
+            return "6"
+
+        elif "5" in ranks:
+            return "5"
+
+        elif "4" in ranks:
+            return "4"
+
+        elif "3" in ranks:
+            return "3"
+
+        elif "2" in ranks:
+            return "2"         
