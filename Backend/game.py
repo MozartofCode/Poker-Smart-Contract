@@ -116,13 +116,27 @@ class Game:
         # Deal
         self.table.append(self.deck.deal_card())
 
-    def evaluate_hands(self):
+
+    def choose_winner(self):
+        player = self.evaluate_hand_player()
+        bot = self.evaluate_hand_bot()
+
+        
+
+
+    def evaluate_hand_player(self):
         ph = self.player.hand
         bh = self.bot.hand
         table = self.table
 
-        cards = [ph.extend(bh)]
-        cards.extend(table)
+
+    def evaluate_hand_bot(self):
+        ph = self.player.hand
+        bh = self.bot.hand
+        table = self.table
+
+
+
 
 
 
