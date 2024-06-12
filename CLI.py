@@ -8,7 +8,6 @@ def print_player_hand(game):
     print()
 
 
-
 def show_hands(game, winner):
     if winner == "player":
         print("Player wins the hand")
@@ -66,13 +65,20 @@ def main():
 
             # Player's turn
             print_player_hand(game)
-            move = input("Do you Check or Raise? (C/R-$): ")
+            move = input("Do you Check/Raise or Fold? (CH/R-$/F): ")
+
             if move == "C":
-                return
-            
+                player.check()
+
+            elif move == "F":
+                player.fold()
+                game.clear_hands()
+
             elif move[0] == "R":
                 return
 
+
+        
             # Flop
             game.deal_flop()
             print_player_hand(game)
@@ -81,6 +87,10 @@ def main():
         
         
         
+
+
+
+
         else:
             return
     

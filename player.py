@@ -22,6 +22,16 @@ class Player:
     def call(self, bet):
         self.money -= bet
     
-    def raise_bot(self, bet):
+    def raise_bet(self, bet):
         self.money -= bet
+
+    def fold(self):
+        return
+    
+    def check(self):
+        return
+    
+
+    
+
          
