@@ -2,7 +2,7 @@ from game import Game
 
 def print_player_hand(game):
     print()
-    print(str(game.table))
+    print("Table: " + str(game.table))
     print("Player's Hand: " + str(game.player.hand))
     print("Bot's Hand: []")
     print()
@@ -11,8 +11,10 @@ def print_player_hand(game):
 def show_hands(game, winner):
     if winner == "player":
         print("Player wins the hand")
-    else:
+    elif winner == "bot":
         print("Bot wins the hand")
+    else:
+        print("It's a draw")
     
     print()
     print(str(game.table))
@@ -38,8 +40,8 @@ def main():
     print()
 
     game = Game()
-    bot = game.bot()
-    player = game.player()
+    bot = game.bot
+    player = game.player
 
     bb = game.big_blind
     sb = game.small_blind
@@ -49,11 +51,16 @@ def main():
 
     while bot.money > 0 and player.money > 0:
 
+        # This is for keeping track of the current hand
+        game_over = False
+
         game.deal_cards()
 
         if player_bb:
             bot.bet_small_blind(sb)
             player.bet_big_blind(bb)
+            game.players_bet = bb
+            game.bots_bet = sb
 
             print_table_money(game)
 
@@ -73,21 +80,69 @@ def main():
             elif move == "F":
                 player.fold()
                 game.clear_hands()
+                game_over = True
 
             elif move[0] == "R":
+                #TODO Raise call logic
                 return
+            
+            if not game_over:
+                
+                # Flop
+                print("Flop")
+                game.deal_flop()
+                print_player_hand(game)
 
+                # Bot's turn
+                print("Bot's Move: ")
+                # TODO
+                # TODO
+                # TODO
 
-        
-            # Flop
-            game.deal_flop()
-            print_player_hand(game)
+                # Player's turn
+                move = input("Do you Check/Raise or Fold? (CH/R-$/F): ")
 
             
-        
-        
-        
 
+
+            if not game_over:
+
+                # Turn
+                print("Turn")
+                game.deal_turn_river()
+                print_player_hand(game)
+
+                # Bot's turn
+                print("Bot's Move: ")
+                # TODO
+                # TODO
+                # TODO
+
+                # Player's turn
+                move = input("Do you Check/Raise or Fold? (CH/R-$/F): ")
+                
+            
+            if not game_over:
+                
+                # River
+                print("River")
+                game.deal_turn_river()
+                print_player_hand(game)
+
+                # Bot's turn
+                print("Bot's Move: ")
+                # TODO
+                # TODO
+                # TODO
+
+                # Player's turn
+                move = input("Do you Check/Raise or Fold? (CH/R-$/F): ")
+                
+            
+            if not game_over:
+                winner = game.choose_winner()
+                show_hands(game, winner)
+                print_table_money(game)
 
 
 
@@ -95,3 +150,7 @@ def main():
             return
     
 
+
+
+if __name__ == "__main__":
+    main()
