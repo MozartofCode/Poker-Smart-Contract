@@ -1,5 +1,6 @@
 # Poker-Bot
 
-This is a simulation for a heads-up poker game between player (me) vs. A Reinforcement Learning Bot
+Decentralized Texas Holder Poker Game (Dapp)
 
-Dapp: blockchain/solidity smart contract for payments
+Backend: Solidity
+Frontend: CLI.py (python)
