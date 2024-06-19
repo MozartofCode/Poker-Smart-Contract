@@ -3,8 +3,8 @@
 # This file has game related functionalities used for game play
 
 import random
-from bot import Bot
-from player import Player
+from Practice_Functions.bot import Bot
+from Practice_Functions.player import Player
 
 class Deck:
 

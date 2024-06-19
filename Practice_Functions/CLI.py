@@ -1,4 +1,4 @@
-from game import Game
+from Practice_Functions.game import Game
 
 def print_player_hand(game):
     print()
