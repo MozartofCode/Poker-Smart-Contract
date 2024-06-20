@@ -5,6 +5,8 @@
 
 pragma solidity ^0.8.2;
 
+import './PlayLib.sol';
+import './CardLib.sol';
 
 contract Poker {
 
@@ -16,6 +18,7 @@ contract Poker {
 
     Player player1;
     Player player2;
+	CardLib.Card[] deck;
 
     // This is the constructor for the contract
     constructor(uint256 _balance1, uint256 _balance2) {
