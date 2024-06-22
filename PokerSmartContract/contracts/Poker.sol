@@ -20,6 +20,9 @@ contract Poker {
     Player player2;
 	CardLib.Card[52] deck;
     CardLib.Card[5] table;
+    uint8 bigBlind = 10;
+    uint8 smallBlind = 5;
+
 
     // This is the constructor for the contract
     constructor(uint256 _balance1, uint256 _balance2) {
