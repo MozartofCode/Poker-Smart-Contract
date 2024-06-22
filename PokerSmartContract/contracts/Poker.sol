@@ -18,10 +18,11 @@ contract Poker {
 
     Player player1;
     Player player2;
-	CardLib.Card[] deck;
+	CardLib.Card[52] deck;
 
     // This is the constructor for the contract
     constructor(uint256 _balance1, uint256 _balance2) {
+        deck = CardLib.createDeck();
         player1.balance = _balance1;
         player2.balance = _balance2;
     }
@@ -79,33 +80,9 @@ contract Poker {
     }   
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Miscellaneous Functions
+    function getNewDeck() public {
+        deck = CardLib.createDeck();
+    }
 
 }

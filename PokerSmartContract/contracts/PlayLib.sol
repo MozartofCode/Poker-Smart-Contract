@@ -25,18 +25,4 @@ library PlayLib{
 
 	}
 
-	// This function gets the rank of the card ('Jack of Diamonds' -> 'Jack')
-	function getRankOfCard(string memory _card) public pure returns (string memory) {
-
-	}
-
-	
-	// This function gets the suit of the card ('Jack of Diamonds' -> 'Diamonds')
-	function getSuitOfCard(string memory _card) public pure returns (string memory) {
-		
-	}
-
-
-
-
 }
