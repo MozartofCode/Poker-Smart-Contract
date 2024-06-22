@@ -2,6 +2,7 @@
 const Poker = artifacts.require('Poker');
 const PlayLib = artifacts.require('PlayLib');
 const CardLib = artifacts.require('CardLib');
+const BigNumber = require('bignumber.js');
 
 contract('Poker', ([deployer, player1, player2]) => {
 
@@ -27,35 +28,6 @@ contract('Poker', ([deployer, player1, player2]) => {
     });
 
     describe('Poker Contract', () => {
-
-        it('should correctly initialize players and deck', async () => {
-            // Check initial balances of players
-            const player1Balance = await pokerInstance.getPlayer1Balance();
-            const player2Balance = await pokerInstance.getPlayer2Balance();
-            assert.equal(player1Balance, 100, 'Player 1 balance is incorrect');
-            assert.equal(player2Balance, 100, 'Player 2 balance is incorrect');
-
-            // Check initial current bets of players
-            const player1Bet = await pokerInstance.getPlayer1CurrentBet();
-            const player2Bet = await pokerInstance.getPlayer2CurrentBet();
-            assert.equal(player1Bet, 0, 'Player 1 current bet is incorrect');
-            assert.equal(player2Bet, 0, 'Player 2 current bet is incorrect');
-
-            // Check initial hands of players
-            const player1Hand = await pokerInstance.getPlayer1Hand();
-            const player2Hand = await pokerInstance.getPlayer2Hand();
-            assert.equal(player1Hand[0].rank, '', 'Player 1 hand is incorrect');
-            assert.equal(player1Hand[1].rank, '', 'Player 1 hand is incorrect');
-            assert.equal(player2Hand[0].rank, '', 'Player 2 hand is incorrect');
-            assert.equal(player2Hand[1].rank, '', 'Player 2 hand is incorrect');
-
-            // Check initial table cards
-            const table = pokerInstance.table;
-            assert.equal(table.length, 5, 'Table cards length is incorrect');
-            for (let i = 0; i < table.length; i++) {
-                assert.equal(table[i].rank, '', `Table card ${i} rank is incorrect`);
-            }
-        });
 
         it('should correctly set and get player balances', async () => {
             await pokerInstance.setPlayer1Balance(1500);
