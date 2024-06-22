@@ -130,10 +130,12 @@ library PlayLib{
 		return false;
 	}
 	
+	
 	function isFullHouse(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
-		return true;
+		return isThreeOfaKind(_hand, _table) && isTwoPair(_hand, _table);
 	}
 	
+
 	function isFlush(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
 		string[7] memory suits;
 		suits[0] = _hand[0].suit;
@@ -209,11 +211,20 @@ library PlayLib{
 		ranks[6] = _table[4].rank;
 		
 		uint256 pairCount = 0;
+		string memory pairs = "";
 
 		for (uint i = 0; i < ranks.length; i++) {
 			for (uint j = i+1; j < ranks.length; j++) {
 				if (keccak256(abi.encodePacked(ranks[i])) == keccak256(abi.encodePacked(ranks[j]))) {	
 					pairCount += 1;
+					
+					if (pairCount == 1) {
+						pairs = ranks[i];
+					}
+
+					else if (pairCount == 2 && keccak256(abi.encodePacked(pairs)) == keccak256(abi.encodePacked(rank[j]))) {
+						pairCount -= 1;
+					}
 				}
 			}
 		}
