@@ -37,9 +37,49 @@ library PlayLib{
 	// :param _hand: The two cards in your hand
 	// :param _table: The five cards at the middle of the table
 	// :return: The index of the ranking
-	// []
+	// [RF, SF, FK, FH, F, S, TK, TP, P, HC]
 	function getHandRanking(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (uint256) {
-		return 0;
+
+		if (isRoyalFlush(_hand, _table)) {
+			return 0;
+		}
+
+		else if (isStraightFlush(_hand, _table)) {
+			return 1;
+		}
+
+		else if (isFourofaKind(_hand, _table)) {
+			return 2;
+		}
+		
+		else if (isFullHouse(_hand, _table)) {
+			return 3;
+		}
+		
+		else if (isFlush(_hand, _table)) {
+			return 4;
+		}
+		
+		else if (isStraight(_hand, _table)) {
+			return 5;
+		}
+		
+		else if (isThreeOfaKind(_hand, _table)) {
+			return 6;
+		}
+		
+		else if (isTwoPair(_hand, _table)) {
+			return 7;
+		}
+		
+		else if (isPair(_hand, _table)) {
+			return 8;
+		}
+
+		else {
+			return 9;
+		}
+
 	}
 
 
@@ -52,5 +92,45 @@ library PlayLib{
 	function tieBreaker(CardLib.Card[] memory _player1Hand, CardLib.Card[] memory _player2Hand, CardLib.Card[] memory _table) public pure returns (bool) {
 		return true;
 	}
+
+
+	function isRoyalFlush(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+		return true;
+	}
+
+	function isStraightFlush(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+		return true;
+	}
+	
+	function isFourOfaKind(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+		return true;
+	}
+	
+	function isFullHouse(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+		return true;
+	}
+	
+	function isFlush(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+		return true;
+	}
+	
+	function isStraight(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+		return true;
+	}
+	
+	function isThreeOfaKind(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+		return true;
+	}
+	
+	function isTwoPair(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+		return true;
+	}
+
+
+	function isPair(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+		return true;
+	}
+
+
 
 }
