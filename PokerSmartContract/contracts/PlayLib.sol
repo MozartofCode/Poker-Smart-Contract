@@ -93,17 +93,41 @@ library PlayLib{
 		return true;
 	}
 
-
+	
+	// Helper Functions for getting rankings
 	function isRoyalFlush(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
 		return true;
 	}
 
 	function isStraightFlush(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
-		return true;
+		return isFlush(_hand, _table) && isStraight(_hand, _table);
 	}
 	
 	function isFourOfaKind(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
-		return true;
+		string[7] memory ranks;
+		ranks[0] = _hand[0].rank;
+		ranks[1] = _hand[1].rank;
+		ranks[2] = _table[0].rank;
+		ranks[3] = _table[1].rank;
+		ranks[4] = _table[2].rank;
+		ranks[5] = _table[3].rank;
+		ranks[6] = _table[4].rank;
+		
+		for (uint i = 0; i < ranks.length; i++) {
+			for (uint j = i+1; j < ranks.length; j++) {
+				for (uint k = j+1; k < ranks.length; k++) {	
+					for (uint w = k+1; w < ranks.length; k++) {
+						if (keccak256(abi.encodePacked(ranks[i])) == keccak256(abi.encodePacked(ranks[j])) &&
+						 keccak256(abi.encodePacked(ranks[j])) == keccak256(abi.encodePacked(ranks[k])) &&
+						  keccak256(abi.encodePacked(ranks[k])) == keccak256(abi.encodePacked(ranks[w]))) {	
+							return true;
+						}
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 	
 	function isFullHouse(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
@@ -111,7 +135,39 @@ library PlayLib{
 	}
 	
 	function isFlush(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
-		return true;
+		string[7] memory suits;
+		suits[0] = _hand[0].suit;
+		suits[1] = _hand[1].suit;
+		suits[2] = _table[0].suit;
+		suits[3] = _table[1].suit;
+		suits[4] = _table[2].suit;
+		suits[5] = _table[3].suit;
+		suits[6] = _table[4].suit;
+		
+		uint256 spades = 0;
+		uint256 hearts = 0;
+		uint256 clubs = 0;
+		uint256 diamonds = 0;
+
+		for (uint256 i = 0; i < suits.length; i++) {
+			if (keccak256(abi.encodePacked(suits[i])) == keccak256(abi.encodePacked("Diamonds"))) {
+				diamonds += 1;
+			}
+			
+			else if (keccak256(abi.encodePacked(suits[i])) == keccak256(abi.encodePacked("Clubs"))) {
+				clubs += 1;
+			} 
+
+			else if (keccak256(abi.encodePacked(suits[i])) == keccak256(abi.encodePacked("Hearts"))) {
+				hearts += 1;
+			} 
+
+			else if (keccak256(abi.encodePacked(suits[i])) == keccak256(abi.encodePacked("Spades"))) {
+				spades += 1;
+			} 
+		}
+
+		return spades >= 5 || hearts >= 5 || clubs >= 5 || diamonds >= 5;
 	}
 	
 	function isStraight(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
@@ -119,16 +175,76 @@ library PlayLib{
 	}
 	
 	function isThreeOfaKind(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
-		return true;
+		string[7] memory ranks;
+		ranks[0] = _hand[0].rank;
+		ranks[1] = _hand[1].rank;
+		ranks[2] = _table[0].rank;
+		ranks[3] = _table[1].rank;
+		ranks[4] = _table[2].rank;
+		ranks[5] = _table[3].rank;
+		ranks[6] = _table[4].rank;
+		
+		for (uint i = 0; i < ranks.length; i++) {
+			for (uint j = i+1; j < ranks.length; j++) {
+				for (uint k = j+1; k < ranks.length; k++) {	
+					if (keccak256(abi.encodePacked(ranks[i])) == keccak256(abi.encodePacked(ranks[j])) && keccak256(abi.encodePacked(ranks[i])) == keccak256(abi.encodePacked(ranks[k]))) {	
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 	
+
 	function isTwoPair(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
-		return true;
+		string[7] memory ranks;
+		ranks[0] = _hand[0].rank;
+		ranks[1] = _hand[1].rank;
+		ranks[2] = _table[0].rank;
+		ranks[3] = _table[1].rank;
+		ranks[4] = _table[2].rank;
+		ranks[5] = _table[3].rank;
+		ranks[6] = _table[4].rank;
+		
+		uint256 pairCount = 0;
+
+		for (uint i = 0; i < ranks.length; i++) {
+			for (uint j = i+1; j < ranks.length; j++) {
+				if (keccak256(abi.encodePacked(ranks[i])) == keccak256(abi.encodePacked(ranks[j]))) {	
+					pairCount += 1;
+				}
+			}
+		}
+
+		if (paircount >= 2) {
+			return true;
+		}
+
+		return false;
 	}
 
 
 	function isPair(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
-		return true;
+		string[7] memory ranks;
+		ranks[0] = _hand[0].rank;
+		ranks[1] = _hand[1].rank;
+		ranks[2] = _table[0].rank;
+		ranks[3] = _table[1].rank;
+		ranks[4] = _table[2].rank;
+		ranks[5] = _table[3].rank;
+		ranks[6] = _table[4].rank;
+		
+		for (uint i = 0; i < ranks.length; i++) {
+			for (uint j = i+1; j < ranks.length; j++) {
+				if (keccak256(abi.encodePacked(ranks[i])) == keccak256(abi.encodePacked(ranks[j]))) {	
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 
