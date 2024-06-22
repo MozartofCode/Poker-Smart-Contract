@@ -9,9 +9,9 @@ library PlayLib{
 
 	// GETTING WHAT IT IS (FLUSH, FULL HOUSE...)
 	// CHOOSING WINNER
-
-	function chooseWinner(Player _player1, Player _player2) public pure returns (string memory) {
-		return "player1";
+	// True if player1 is winner, False if player2 is winner
+	function chooseWinner(Player _player1, Player _player2) public pure returns (bool) {
+		return true;
 	} 
 
 

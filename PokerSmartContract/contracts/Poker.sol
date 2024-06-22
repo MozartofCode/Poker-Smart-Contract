@@ -79,10 +79,26 @@ contract Poker {
         return player2.hand;
     }   
 
-
     // Miscellaneous Functions
     function getNewDeck() public {
         deck = CardLib.createDeck();
+        player1.hand = [];
+        player2.hand = [];
+        player1.currentBet = 0;
+        player2.currentBet = 0;
+    }
+
+    function endOfHand(Player _player1, Player _player2) public {
+        // End of River
+        if (PlayLib.chooseWinner(_player1, _player2)) {
+            // Player1 wins
+            player1.balance += player1.currentBet;
+        }
+
+        else{
+            // Player2 wins
+            player2.balance -= player2.currentBet;
+        }
     }
 
 }
