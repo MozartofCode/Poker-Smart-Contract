@@ -12,17 +12,21 @@ contract Poker {
 
     struct Player {
         uint256 balance;
-        CardLib.Card[] hand;
+        CardLib.Card[2] hand;
         uint256 currentBet;
     }
 
     Player player1;
     Player player2;
 	CardLib.Card[52] deck;
+    CardLib.Card[5] table;
 
     // This is the constructor for the contract
     constructor(uint256 _balance1, uint256 _balance2) {
-        deck = CardLib.createDeck();
+        CardLib.Card[52] memory tempDeck = CardLib.createDeck();
+        for (uint i = 0; i < tempDeck.length; i++) {
+            deck[i] = tempDeck[i];
+        }
         player1.balance = _balance1;
         player2.balance = _balance2;
     }
@@ -45,12 +49,16 @@ contract Poker {
         player2.currentBet = _bet;
     }
 
-    function setPlayer1Hand(CardLib.Card[] memory _hand) public {
-        player1.hand = _hand;
+    function setPlayer1Hand(CardLib.Card[2] memory _hand) public {
+        for (uint i = 0; i < 2; i++) {
+            player1.hand[i] = _hand[i];
+        }
     } 
 
-    function setPlayer2Hand(CardLib.Card[] memory _hand) public {
-        player2.hand = _hand;
+    function setPlayer2Hand(CardLib.Card[2] memory _hand) public {
+        for (uint i = 0; i < 2; i++) {
+            player2.hand[i] = _hand[i];
+        }
     } 
 
 
@@ -71,26 +79,42 @@ contract Poker {
         return player2.currentBet;
     }
 
-    function getPlayer1Hand() public view returns (CardLib.Card[] memory) {
+    function getPlayer1Hand() public view returns (CardLib.Card[2] memory) {
         return player1.hand;
     }
     
-    function getPlayer2Hand() public view returns (CardLib.Card[] memory) {
+    function getPlayer2Hand() public view returns (CardLib.Card[2] memory) {
         return player2.hand;
     }   
 
     // Miscellaneous Functions
     function getNewDeck() public {
-        deck = CardLib.createDeck();
-        player1.hand = [];
-        player2.hand = [];
+        CardLib.Card[52] memory tempDeck = CardLib.createDeck();
+        for (uint i = 0; i < tempDeck.length; i++) {
+            deck[i] = tempDeck[i];
+        }
+        
+        // Initialize hands and table
+        for (uint i = 0; i < player1.hand.length; i++) {
+            player1.hand[i] = CardLib.Card("", "");
+        }
+        
+        for (uint i = 0; i < player2.hand.length; i++) {
+            player2.hand[i] = CardLib.Card("", "");
+        }
+        
+        for (uint i = 0; i < table.length; i++) {
+            table[i] = CardLib.Card("", "");
+        }
+
         player1.currentBet = 0;
         player2.currentBet = 0;
+
     }
 
-    function endOfHand(Player _player1, Player _player2) public {
+    function endOfHand(Player memory _player1, Player memory _player2) public {
         // End of River
-        if (PlayLib.chooseWinner(_player1, _player2)) {
+        if (PlayLib.chooseWinner(_player1, _player2, table)) {
             // Player1 wins
             player1.balance += player1.currentBet;
         }

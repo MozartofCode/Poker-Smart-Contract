@@ -6,6 +6,7 @@
 pragma solidity ^0.8.2;
 
 import './CardLib.sol';
+import './Poker.sol';
 
 library PlayLib{
 
@@ -14,16 +15,16 @@ library PlayLib{
 	// :param _player2: player2
 	// :param _table: cards on table
 	// :return: True if player1 is winner, False if player2 is winner
-	function chooseWinner(Player _player1, Player _player2, CardLib.Card[] memory _table) public pure returns (bool) {
+	function chooseWinner(Poker.Player memory _player1, Poker.Player memory _player2, CardLib.Card[5] memory _table) public pure returns (bool) {
 		
-		player1Rank = getHandRanking(_player1.hand, _table);
-		player2Rank = getHandRanking(_player2.hand, _table);
+		uint8 player1Rank = getHandRanking(_player1.hand, _table);
+		uint8 player2Rank = getHandRanking(_player2.hand, _table);
 		
-		if player1Rank < player2Rank {
+		if (player1Rank < player2Rank) {
 			return true;
 		}
 
-		else if player2Rank < player1Rank {
+		else if (player2Rank < player1Rank) {
 			return false;
 		}
 
@@ -38,7 +39,7 @@ library PlayLib{
 	// :param _table: The five cards at the middle of the table
 	// :return: The index of the ranking
 	// [RF, SF, FK, FH, F, S, TK, TP, P, HC]
-	function getHandRanking(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (uint256) {
+	function getHandRanking(CardLib.Card[2] memory _hand, CardLib.Card[5] memory _table) public pure returns (uint8) {
 
 		if (isRoyalFlush(_hand, _table)) {
 			return 0;
@@ -48,7 +49,7 @@ library PlayLib{
 			return 1;
 		}
 
-		else if (isFourofaKind(_hand, _table)) {
+		else if (isFourOfaKind(_hand, _table)) {
 			return 2;
 		}
 		
@@ -89,9 +90,9 @@ library PlayLib{
 	// :param _table: The cards on the table
 	// :return: True if player1 is winner, false if player2 is winner
 	// If there is an actual tie then returns true (actual ties go to player1 :))
-	function tieBreaker(CardLib.Card[] memory _player1Hand, CardLib.Card[] memory _player2Hand, CardLib.Card[] memory _table) public pure returns (bool) {
-		player1 = getHighCard(_player1Hand, _table);
-		player2 = getHighCard(_player2Hand, _table);
+	function tieBreaker(CardLib.Card[2] memory _player1Hand, CardLib.Card[2] memory _player2Hand, CardLib.Card[5] memory _table) public pure returns (bool) {
+		uint8 player1 = getHighCard(_player1Hand, _table);
+		uint8 player2 = getHighCard(_player2Hand, _table);
 
 		if (player1 > player2) {
 			return true;
@@ -106,7 +107,7 @@ library PlayLib{
 
 	
 	// Helper Functions for getting rankings
-	function isRoyalFlush(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+	function isRoyalFlush(CardLib.Card[2] memory _hand, CardLib.Card[5] memory _table) public pure returns (bool) {
 		CardLib.Card[] memory allCards = new CardLib.Card[](_hand.length + _table.length);
         for (uint i = 0; i < _hand.length; i++) {
             allCards[i] = _hand[i];
@@ -147,11 +148,11 @@ library PlayLib{
 	}
 
 
-	function isStraightFlush(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+	function isStraightFlush(CardLib.Card[2] memory _hand, CardLib.Card[5] memory _table) public pure returns (bool) {
 		return isFlush(_hand, _table) && isStraight(_hand, _table);
 	}
 	
-	function isFourOfaKind(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+	function isFourOfaKind(CardLib.Card[2] memory _hand, CardLib.Card[5] memory _table) public pure returns (bool) {
 		string[7] memory ranks;
 		ranks[0] = _hand[0].rank;
 		ranks[1] = _hand[1].rank;
@@ -179,12 +180,12 @@ library PlayLib{
 	}
 	
 	
-	function isFullHouse(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+	function isFullHouse(CardLib.Card[2] memory _hand, CardLib.Card[5] memory _table) public pure returns (bool) {
 		return isThreeOfaKind(_hand, _table) && isTwoPair(_hand, _table);
 	}
 	
 
-	function isFlush(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+	function isFlush(CardLib.Card[2] memory _hand, CardLib.Card[5] memory _table) public pure returns (bool) {
 		string[7] memory suits;
 		suits[0] = _hand[0].suit;
 		suits[1] = _hand[1].suit;
@@ -220,7 +221,7 @@ library PlayLib{
 		return spades >= 5 || hearts >= 5 || clubs >= 5 || diamonds >= 5;
 	}
 	
-	function isStraight(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+	function isStraight(CardLib.Card[2] memory _hand, CardLib.Card[5] memory _table) public pure returns (bool) {
     	string[13] memory rankOrder = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"];
         uint8[13] memory rankValues;
 
@@ -237,7 +238,7 @@ library PlayLib{
 		ranks[5] = _table[3].rank;
 		ranks[6] = _table[4].rank;
 
-		uint8[7] AllRankValues;		
+		uint8[] memory allRankValues;		
 		        
         for (uint i = 0; i < ranks.length; i++) {
             for (uint8 j = 0; j < rankOrder.length; j++) {
@@ -251,7 +252,7 @@ library PlayLib{
         return checkConsecutive(allRankValues);
 	}
 
-	function isThreeOfaKind(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+	function isThreeOfaKind(CardLib.Card[2] memory _hand, CardLib.Card[5] memory _table) public pure returns (bool) {
 		string[7] memory ranks;
 		ranks[0] = _hand[0].rank;
 		ranks[1] = _hand[1].rank;
@@ -275,7 +276,7 @@ library PlayLib{
 	}
 	
 
-	function isTwoPair(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+	function isTwoPair(CardLib.Card[2] memory _hand, CardLib.Card[5] memory _table) public pure returns (bool) {
 		string[7] memory ranks;
 		ranks[0] = _hand[0].rank;
 		ranks[1] = _hand[1].rank;
@@ -297,14 +298,14 @@ library PlayLib{
 						pairs = ranks[i];
 					}
 
-					else if (pairCount == 2 && keccak256(abi.encodePacked(pairs)) == keccak256(abi.encodePacked(rank[j]))) {
+					else if (pairCount == 2 && keccak256(abi.encodePacked(pairs)) == keccak256(abi.encodePacked(ranks[j]))) {
 						pairCount -= 1;
 					}
 				}
 			}
 		}
 
-		if (paircount >= 2) {
+		if (pairCount >= 2) {
 			return true;
 		}
 
@@ -312,7 +313,7 @@ library PlayLib{
 	}
 
 
-	function isPair(CardLib.Card[] memory _hand, CardLib.Card[] memory _table) public pure returns (bool) {
+	function isPair(CardLib.Card[2] memory _hand, CardLib.Card[5] memory _table) public pure returns (bool) {
 		string[7] memory ranks;
 		ranks[0] = _hand[0].rank;
 		ranks[1] = _hand[1].rank;
@@ -336,7 +337,7 @@ library PlayLib{
 
 	// Miscaleneous Helpers
 
-	function getHighCard(CardLib.Card[] memory _player, CardLib.Card[] memory _table) internal pure returns (uint8) {
+	function getHighCard(CardLib.Card[2] memory _hand, CardLib.Card[5] memory _table) internal pure returns (uint8) {
 
 		string[13] memory rankOrder = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"];
         uint8[13] memory rankValues;
@@ -352,9 +353,7 @@ library PlayLib{
 		ranks[3] = _table[1].rank;
 		ranks[4] = _table[2].rank;
 		ranks[5] = _table[3].rank;
-		ranks[6] = _table[4].rank;
-
-		uint8[7] AllRankValues;		
+		ranks[6] = _table[4].rank;	
 
 		uint8 maxCard = 0;
 
