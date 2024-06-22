@@ -12,7 +12,7 @@ contract Poker {
 
     struct Player {
         uint256 balance;
-        string[] hand;
+        CardLib.Card[] hand;
         uint256 currentBet;
     }
 
@@ -45,11 +45,11 @@ contract Poker {
         player2.currentBet = _bet;
     }
 
-    function setPlayer1Hand(string[] memory _hand) public {
+    function setPlayer1Hand(CardLib.Card[] memory _hand) public {
         player1.hand = _hand;
     } 
 
-    function setPlayer2Hand(string[] memory _hand) public {
+    function setPlayer2Hand(CardLib.Card[] memory _hand) public {
         player2.hand = _hand;
     } 
 
@@ -71,11 +71,11 @@ contract Poker {
         return player2.currentBet;
     }
 
-    function getPlayer1Hand() public view returns (string[] memory) {
+    function getPlayer1Hand() public view returns (CardLib.Card[] memory) {
         return player1.hand;
     }
     
-    function getPlayer2Hand() public view returns (string[] memory) {
+    function getPlayer2Hand() public view returns (CardLib.Card[] memory) {
         return player2.hand;
     }   
 
