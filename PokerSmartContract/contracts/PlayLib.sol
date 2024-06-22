@@ -88,8 +88,19 @@ library PlayLib{
 	// :param _player2Hand: Player2's hand
 	// :param _table: The cards on the table
 	// :return: True if player1 is winner, false if player2 is winner
-	// If there is an actual tie then returns true but changes the bets to 0 for no change
+	// If there is an actual tie then returns true (actual ties go to player1 :))
 	function tieBreaker(CardLib.Card[] memory _player1Hand, CardLib.Card[] memory _player2Hand, CardLib.Card[] memory _table) public pure returns (bool) {
+		player1 = getHighCard(_player1Hand, _table);
+		player2 = getHighCard(_player2Hand, _table);
+
+		if (player1 > player2) {
+			return true;
+		}
+
+		else if (player2 > player1) {
+			return false;
+		}
+
 		return true;
 	}
 
@@ -324,6 +335,42 @@ library PlayLib{
 
 
 	// Miscaleneous Helpers
+
+	function getHighCard(CardLib.Card[] memory _player, CardLib.Card[] memory _table) internal pure returns (uint8) {
+
+		string[13] memory rankOrder = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"];
+        uint8[13] memory rankValues;
+
+        for (uint8 i = 0; i < rankOrder.length; i++) {
+            rankValues[i] = i + 2;
+        }
+		
+		string[7] memory ranks;
+		ranks[0] = _hand[0].rank;
+		ranks[1] = _hand[1].rank;
+		ranks[2] = _table[0].rank;
+		ranks[3] = _table[1].rank;
+		ranks[4] = _table[2].rank;
+		ranks[5] = _table[3].rank;
+		ranks[6] = _table[4].rank;
+
+		uint8[7] AllRankValues;		
+
+		uint8 maxCard = 0;
+
+		for (uint i = 0; i < ranks.length; i++) {
+			for (uint j = 0; j < rankOrder.length; j++) {
+				if (keccak256(abi.encodePacked(ranks[i])) == keccak256(abi.encodePacked(rankOrder[j]))) {	
+					if (maxCard < rankValues[j]) {
+						maxCard = rankValues[j];
+					}
+				}
+			}
+		}
+
+		return maxCard;
+	}
+
 	function sortRanks(uint8[] memory _ranks) internal pure returns (uint8[] memory) {
         for (uint i = 0; i < _ranks.length; i++) {
             for (uint j = i + 1; j < _ranks.length; j++) {
