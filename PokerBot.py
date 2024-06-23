@@ -6,3 +6,14 @@ class MyPokerBot:
     def __init__(self):
         return
     
+    def pre_flop_action(self):
+        return
+    
+    def flop_action(self):
+        return
+    
+    def turn_action(self):
+        return
+    
+    def river_action(self):
+        return
