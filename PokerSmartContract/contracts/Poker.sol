@@ -64,8 +64,20 @@ contract Poker {
         }
     } 
 
+    function setTable(CardLib.Card memory _card, uint8 _index) public {
+        table[_index] = _card;
+    }
+
 
     // These are the getters for the contract
+    function getBigBlind() public view returns (uint8) {
+        return bigBlind;
+    }
+
+    function getSmallBlind() public view returns (uint8) {
+        return smallBlind;
+    }
+
     function getPlayer1Balance() public view returns (uint256){
         return player1.balance;
     }
