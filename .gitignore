@@ -1,0 +1,13 @@
+# Ignore API key file
+api_key.txt
+
+# Ignore environment variable files
+.env
+
+# Node.js specific
+node_modules/
+
+# Python specific
+__pycache__/
+*.py[cod]
+*.so
