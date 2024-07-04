@@ -8,17 +8,7 @@ API_KEY = ""
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-1.0-pro')
 
-
-class Game_State:
-    def __init__(self, table_cards, your_cards, player_recent_move, pot, game_situation, bot_money, player_money):
-        self.table_cards = table_cards
-        self.your_cards = your_cards
-        self.player_recent_move = player_recent_move      
-        self.pot = pot
-        self.game_situation = game_situation
-        self.bot_money = bot_money
-        self.player_money = player_money
-
+from CLI import Game_State
         
 # FOR SITUATION WHERE BOTS GOING SECOND
 #
